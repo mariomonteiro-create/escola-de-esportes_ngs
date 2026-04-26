@@ -36,14 +36,12 @@ app.secret_key = os.environ.get("SECRET_KEY", "c7s_sge_secret_2026")
 # ─────────────────────────────────────────────────────────────
 # PATHS — banco persistente no Render, local no Windows/Linux dev
 # ─────────────────────────────────────────────────────────────
-IS_RENDER = os.environ.get("RENDER") == "true"
-BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
+# Agora o sistema vai salvar o banco numa pasta local chamada "data"
+# tanto no Render quanto no seu PC, evitando o erro de permissão.
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
-if IS_RENDER:
-    DATA_DIR = "/data"                    # disco persistente montado no Render
-    os.makedirs(DATA_DIR, exist_ok=True)  # cria /data se ainda não existir
-else:
-    DATA_DIR = BASE_DIR                   # pasta do projeto em dev local
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR, exist_ok=True)
 
 DB_PATH = os.path.join(DATA_DIR, "SGE_MasterPro_V12.db")
 
